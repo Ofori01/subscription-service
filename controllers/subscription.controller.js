@@ -25,3 +25,21 @@ export async function createSubscription (req,res,next) {
     }
     
 }
+
+export async function getUserSubscriptions(req,res,next){
+
+    try {
+        if(req.user.id !== req.params.id){
+            const error  = new Error("Unauthorized")
+            error.statusCode = 401
+            throw error
+        }
+
+        const sub = await Subscriptions.find({user: req.params.id})
+        res.json({success: true, data: sub})
+        
+    } catch (error) {
+        next(error)
+        
+    }
+}

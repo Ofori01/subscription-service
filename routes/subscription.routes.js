@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createSubscription } from "../controllers/subscription.controller.js"
+import { createSubscription, getUserSubscriptions } from "../controllers/subscription.controller.js"
 import authorize from "../middlewares/authorization.middleware.js"
 
 const subscriptionRouter = Router()
@@ -14,7 +14,7 @@ subscriptionRouter.put('/:id', (req,res)=>res.send({message: "Update a subscript
 
 subscriptionRouter.delete('/:id', (req,res)=> res.send({message: "Delete a subscription"}))
 
-subscriptionRouter.get('/user/:id', (req,res)=> res.send({message: "Get user subscription"}))
+subscriptionRouter.get('/user/:id', authorize, getUserSubscriptions)
 
 subscriptionRouter.put('/:id/cancel', (req,res)=> res.send({message: "Cancel subscription"}))
 
