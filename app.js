@@ -6,6 +6,7 @@ import subscriptionRouter from './routes/subscription.routes.js'
 import connectToDb from './database/mongodb.js'
 import errorHandler from './middlewares/errorhandler.middleware.js'
 import cookieParser from 'cookie-parser'
+import arcjetMiddleware from './middlewares/arcjet.middleware.js'
 
 const app  = express()
 
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use(urlencoded({extended: false}))
 app.use(cookieParser())
 
+app.use(arcjetMiddleware)
 //routes
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/auth', authRouter)

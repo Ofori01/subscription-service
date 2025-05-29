@@ -13,6 +13,7 @@ async function signUp(req,res,next) {
         const {email, password,name} = req.body
 
         // check if user exists
+
         const existingUser = await User.findOne({email});
         if (existingUser){
             const error = new Error("User already exists")
@@ -22,15 +23,18 @@ async function signUp(req,res,next) {
 
         //generate hash password
         const hashedPassword = await hashPassword(password)
+        
 
         //create user
-        const newUser = await User.create({email,password: hashedPassword, name}, {session})
+        const newUser = await User.create([{email,password: hashedPassword, name}], {session})
 
         //generate token
-        const token = generateToken(newUser[0]._id);
+        const token = generateToken({userId: newUser[0]._id});
         
         await session.commitTransaction();
-        session.endSession();
+        await session.endSession();
+
+        console.log("User created")
 
         res.status(201).send({
             success: true,
@@ -41,8 +45,8 @@ async function signUp(req,res,next) {
             }
         })
     } catch (error) {
-        session.abortTransaction();
-        session.endSession();
+        await session.abortTransaction();
+        await session.endSession();
         next(error)
         
     }
@@ -71,7 +75,7 @@ async function signIn(req,res,next) {
         }
 
         // generate token
-        const token  = generateToken(user._id);
+        const token  = generateToken({userId: user.id});
 
         res.status(200).send({
             success: true,
