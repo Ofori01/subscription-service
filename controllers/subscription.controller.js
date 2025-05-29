@@ -6,12 +6,13 @@ export async function createSubscription (req,res,next) {
     session.startTransaction()
     try {
 
-        const newSub = await Subscriptions.create({
+
+        const newSub = await Subscriptions.create([{
             ...req.body,
             user: req.user._id
-        }, {session})
+        }], {session})
 
-        res.status(201).send({success: true, data: newSub})
+        res.status(201).send({success: true, data: newSub[0]})
 
         await session.commitTransaction()
         await session.endSession()

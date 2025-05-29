@@ -13,10 +13,10 @@ async function authorize(req, res, next){
         }
 
         //decode token
-        const userId = decodeToken(token)
+        const {userId} = decodeToken(token)
 
         // find user
-        const user = User.findById(userId)
+        const user = await User.findById(userId)
         
         if (!user){
             throw new Error("Unauthorized")
