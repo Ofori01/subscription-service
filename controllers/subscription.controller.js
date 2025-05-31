@@ -1,28 +1,40 @@
-import mongoose from "mongoose"
 import Subscriptions from "../models/subscription.model.js"
+import workflowCLient from "../config/qtsash.workflow.js"
+import { SERVER_URL } from "../config/env.js"
 
 export async function createSubscription (req,res,next) {
-    const session  =  await mongoose.startSession()
-    session.startTransaction()
+    
     try {
 
 
-        const newSub = await Subscriptions.create([{
+        const newSub = await Subscriptions.create({
             ...req.body,
             user: req.user._id
-        }], {session})
+        })
 
-        res.status(201).send({success: true, data: newSub[0]})
 
-        await session.commitTransaction()
-        await session.endSession()
+        // create workflow
+        const {workflowRunId}  = await workflowCLient.trigger({
+            url: `${SERVER_URL}/api/v1/workflow/send-reminders`,
+            body: {
+                subscriptionId : newSub.id
+            },
+            headers: {
+                'content-type': "application/json"
+
+            }
+        })
+
+        res.status(201).send({success: true, data: newSub, workflowRunId })
+
+        
+        
         
     } catch (error) {
-        await session.abortTransaction()
-        await session.endSession()
         next(error)
         
     }
+    
     
 }
 

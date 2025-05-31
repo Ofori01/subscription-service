@@ -72,9 +72,9 @@ subscriptionSchema.pre('save', function(next){
             yearly: 365
         }
         this.renewalDate = new Date(this.startDate)
-        this.renewalDate.setDate(this.renewalDate + periods[this.frequency])
+        this.renewalDate.setDate(this.renewalDate.getDate() + periods[this.frequency])
     }
-    if(this.renewalDate > new Date()){
+    if(this.renewalDate < new Date()){
         this.status = 'expired'
     }
     next()
