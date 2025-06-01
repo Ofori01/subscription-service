@@ -12,6 +12,8 @@ export const  {
     ARCJET_KEY,
     ARCJET_ENV,
     QSTASH_URL, QSTASH_TOKEN,
-    SERVER_URL
+    SERVER_URL,
+    NODEMAILER_PASSWORD,
+    NODEMAILER_EMAIL
 } = process.env
 

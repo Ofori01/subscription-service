@@ -27,15 +27,10 @@ export async function createSubscription (req,res,next) {
 
         res.status(201).send({success: true, data: newSub, workflowRunId })
 
-        
-        
-        
     } catch (error) {
         next(error)
         
     }
-    
-    
 }
 
 export async function getUserSubscriptions(req,res,next){
