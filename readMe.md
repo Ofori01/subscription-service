@@ -22,7 +22,7 @@ Features integration with MongoDB, Arcjet for security, and QStash for workflow/
 1. **Clone the repository:**
 
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/Ofori01/subscription-service.git
    cd subscription-service
    ```
 
